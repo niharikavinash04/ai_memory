@@ -1,0 +1,3 @@
+[mcp_servers.ai-work-memory]
+command = "python"
+args = ["-m", "mcp_server.server"]

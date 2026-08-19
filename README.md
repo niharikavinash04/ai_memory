@@ -1,4 +1,4 @@
-# AI Work Memory — Remote MCP & Claude.ai Browser Integration
+# AI Work Memory 
 
 An internal system for capturing, reviewing, preserving, and retrieving valuable work produced by AI coding agents and browser-based AI assistants (**Claude.ai Browser**, **Claude Code**, and **OpenAI Codex**).
 

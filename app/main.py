@@ -1,16 +1,15 @@
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, security
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.types import Scope, Receive, Send
 
 from app.config import settings
 from app.db.session import init_db
-from app.api.v1 import knowledge, inbox
+from app.api.v1 import knowledge, inbox, memory
 
 from mcp_server.server import mcp
-from mcp.server.transport_security import TransportSecuritySettings
 
 
 class DynamicMCPApp:
@@ -24,21 +23,7 @@ class DynamicMCPApp:
         self.current_app: Any = self._create_mcp_app()
 
     def _create_mcp_app(self) -> Any:
-        return mcp.streamable_http_app(
-            transport_security=TransportSecuritySettings(
-                enable_dns_rebinding_protection=True,
-                allowed_hosts=[
-                    "127.0.0.1:*",
-                    "localhost:*",
-                    "unbeaten-hazard-evict.ngrok-free.dev",
-                ],
-                allowed_origins=[
-                    "http://127.0.0.1:*",
-                    "http://localhost:*",
-                    "https://unbeaten-hazard-evict.ngrok-free.dev",
-                ],
-            )
-        )
+        return mcp.streamable_http_app()
 
     def reset(self) -> None:
         self.current_app = self._create_mcp_app()
@@ -92,6 +77,7 @@ def create_app() -> FastAPI:
     # Register REST API routers FIRST
     app.include_router(knowledge.router, prefix="/api/v1")
     app.include_router(inbox.router, prefix="/api/v1")
+    app.include_router(memory.router, prefix="/api/v1")
 
     @app.get("/")
     def read_root():

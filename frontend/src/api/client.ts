@@ -78,6 +78,18 @@ export const api = {
     return fetchJson<SearchResultItem[]>(`/api/v1/knowledge/search?${params.toString()}`);
   },
 
+  // Dedicated Supabase Memory Query Endpoint (/api/v1/memory/query)
+  async queryMemory(query: string, projectId?: string, limit: number = 20): Promise<SearchResultItem[]> {
+    return fetchJson<SearchResultItem[]>('/api/v1/memory/query', {
+      method: 'POST',
+      body: JSON.stringify({
+        query,
+        project_id: projectId && projectId.trim() ? projectId.trim() : undefined,
+        limit,
+      }),
+    });
+  },
+
   // Inbox & Review Flow
   async getPendingInbox(): Promise<KnowledgeItem[]> {
     return fetchJson<KnowledgeItem[]>('/api/v1/inbox');

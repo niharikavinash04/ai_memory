@@ -3,11 +3,10 @@
 import sys
 import logging
 from typing import Optional, Dict, Any
+from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
+from mcp.server.fastmcp import FastMCP
 
-try:
-    from mcp.server.fastmcp import FastMCP
-except ImportError:
-    from mcp.server.mcpserver import MCPServer as FastMCP
 
 from mcp_server.tools import (
     hello_world,
@@ -24,7 +23,19 @@ logging.basicConfig(
 )
 
 # Initialize MCP Server
-mcp = FastMCP("ai-work-memory")
+mcp = FastMCP(
+    "ai-work-memory",
+    transport_security=TransportSecuritySettings(
+        allowed_hosts=[
+            "localhost",
+            "127.0.0.1",
+            "unbeaten-hazard-evict.ngrok-free.dev",
+        ],
+        allowed_origins=[
+            "https://unbeaten-hazard-evict.ngrok-free.dev",
+        ],
+    ),
+)
 
 @mcp.tool(
     name="hello_world",
